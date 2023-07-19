@@ -6,13 +6,14 @@
 /*   By: mcharrad <mcharrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 12:13:03 by mcharrad          #+#    #+#             */
-/*   Updated: 2023/07/09 09:15:38 by mcharrad         ###   ########.fr       */
+/*   Updated: 2023/07/19 11:13:24 by mcharrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Span.hpp"
 #include <cmath>
 #include <limits>
+#include <numeric>
 
 Span::Span() : size(0) {}
 
@@ -56,20 +57,6 @@ long Span::shortestSpan() const
 {
     std::list<int> sortedArr(arr);
     sortedArr.sort();
-    long span = arr.size() > 1 ? std::numeric_limits<long>::max() : 0;
-
-    for (std::list<int>::iterator i = sortedArr.begin(); i != sortedArr.end();)
-    {
-        int current = *i;
-        i++;
-        if (i != sortedArr.end())
-        {
-            int next = *i;
-            long diff = std::abs(static_cast<long>(next) - current);
-            if (span > diff)
-                span = diff;
-        }
-
-    }
-    return span;
+    std::adjacent_difference(sortedArr.begin(), sortedArr.end(), sortedArr.begin());
+    return *std::min_element(++sortedArr.begin(), sortedArr.end());
 }
